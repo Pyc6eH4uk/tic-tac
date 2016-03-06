@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1457265571 source:/home/pyc6eh4uk/inf/ZANOGO/main.cpp
+	<iostream>
+	<iomanip>
+	<cstdlib>
+	<cstdio>
+
