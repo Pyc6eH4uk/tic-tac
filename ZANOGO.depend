@@ -1,7 +1,14 @@
 # depslib dependency file v1.0
-1457265571 source:/home/pyc6eh4uk/inf/ZANOGO/main.cpp
+1457286812 source:/home/pyc6eh4uk/inf/ZANOGO/main.cpp
+	<iostream>
+	"Board.h"
+
+1457286443 /home/pyc6eh4uk/inf/ZANOGO/include/Board.h
+	<vector>
+
+1457286660 source:/home/pyc6eh4uk/inf/ZANOGO/src/Board.cpp
+	"Board.h"
 	<iostream>
 	<iomanip>
-	<cstdlib>
 	<cstdio>
 
