@@ -21,7 +21,8 @@ class Board
         Board(int n, int m);
         virtual ~Board();
 
-        void show();
+        void showx();
+        void showy();
         void place(int i, int j);
         void setCurrentPlayer(bool krestik);
 
@@ -30,7 +31,9 @@ class Board
         int m_n, m_m, m_real_n, m_real_m;
         int last_i, last_j;
         bool m_krestik;
-        vector<int> m_board, m_score;
+        bool m_pause;
+        bool m_win_krestik;
+        vector<int> m_board, m_scorex, m_scorey;
 
         inline int get(int i, int j);
     private:

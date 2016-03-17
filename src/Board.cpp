@@ -13,8 +13,8 @@ Board::Board(int n, int m)
     : m_n(n), m_m(m), m_real_n(n+2), m_real_m(m+2)
 {
     m_board.assign(m_real_n * m_real_m, 0);
-    m_score.assign(m_real_n * m_real_m, 0);
-
+    m_scorex.assign(m_real_n * m_real_m, 0);
+    m_scorey.assign(m_real_n * m_real_m, 0);
     for (int j = 0; j < m_real_m; j++) m_board[get(0, j)] = 3, m_board[get(m_real_n-1, j)] = 3;
     for (int i = 0; i < m_real_n; i++) m_board[get(i, 0)] = 3, m_board[get(i, m_real_m-1)] = 3;
 }
@@ -23,7 +23,7 @@ Board::~Board()
 {
 }
 
-void Board::show()
+void Board::showx()//Показываем оценку для крестиков
 {
     system("clear");
     SetCursorPos(0, 0);
@@ -45,7 +45,28 @@ void Board::show()
             else if (m_board[get(i, j)] == 2)
                     cout << green << setw(6) << 'O' << " ";
             else {
-                cout << setw(6) << m_score[get(i, j)] << " ";
+                cout << setw(6) << m_scorex[get(i, j)] << " ";
+            }
+            cout << reset;
+        }
+        cout << endl;
+    }
+
+}
+void Board::showy()//Показываем оценку для нулей
+{
+    SetCursorPos(40, 25);
+    for (int i = 1; i <= m_n; i++) {
+        SetCursorPos(40, 25 + i);
+        for (int j = 1; j <= m_m; j++) {
+            if (i == last_i && j == last_j)
+                cout << blue;
+            if (m_board[get(i, j)] == 1)
+                    cout << red << setw(6) << 'X' << " ";
+            else if (m_board[get(i, j)] == 2)
+                    cout << green << setw(6) << 'O' << " ";
+            else {
+                cout << setw(6) << m_scorey[get(i, j)] << " ";
             }
             cout << reset;
         }
@@ -53,7 +74,7 @@ void Board::show()
     }
 }
 
-void Board::place(int i, int j)
+void Board::place(int i, int j)//Втавляем элемент и определяем оценку по пятёркам
 {
     m_board[get(i, j)] = m_krestik ? 1 : 2;
 
@@ -78,19 +99,35 @@ void Board::place(int i, int j)
                 int jn = js + dx[w] * p;
                 if (goodIndex(in, jn)) {
                     kol[m_board[get(in, jn)]]++;
+
                 }
             }
+
+            if (kol[1] == 5) {
+                m_pause = true;
+                m_win_krestik = 1;
+            } else if (kol[2] == 5) {
+                m_pause = true;
+                m_win_krestik = 0;
+            }
+
             for (int p = 0; p < 5; p++) {
                 int in = is + dy[w] * p;
                 int jn = js + dx[w] * p;
-                if (goodIndex(in, jn))
+                if (goodIndex(in, jn)) {
                     if (kol[3] != 0) break;
 
-                    else if (m_krestik && (m_board[get(in, jn)] == 0))
-                        m_score[get(in, jn)] += m_value[kol[1]];
-                    else {
-                        m_score[get(in, jn)] = 0;
+                    else if (m_krestik && (m_board[get(in, jn)] == 0)) {
+                        m_scorex[get(in, jn)] += m_value[kol[1]] - m_value[kol[2]];
+                        m_scorey[get(in, jn)] -= m_value[kol[2]];
+                        m_scorey[get(in, jn)] = max(m_scorey[get(in, jn)], 0);
                     }
+                    else if (!m_krestik && (m_board[get(in, jn)] == 0)) {
+                        m_scorey[get(in, jn)] += m_value[kol[2]] - m_value[kol[1]];
+                        m_scorex[get(in, jn)] -= m_value[kol[1]];
+                        m_scorex[get(in, jn)] = max(m_scorex[get(in, jn)], 0);
+                    }
+                }
             }
         }
     }
